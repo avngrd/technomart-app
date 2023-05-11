@@ -18,39 +18,29 @@ const FLAGS = ['new', 'promo', ''];
 const CATEGORIES = ['Перфораторы', 'Шуруповерты', 'Ключи', 'Отвертки'];
 const ELECTRIC_TYPE = [true, false];
 
-let PRICES = [];
-let cards = [];
+const cards = [];
 
 function getRandomNumber(minNumber, maxNumber) {
-  let min = Math.floor(minNumber);
-  let max = Math.ceil(maxNumber);
-  return Math.ceil(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (maxNumber - minNumber)) + minNumber;
 }
 
 function dataGeneration() {
-  function generatePrices() {
-    for (let i = 0; i < CARDS_COUNT; i++) {
-      PRICES[i] = Math.ceil(getRandomNumber(MIN_PRICE, MAX_PRICE));
-    }
-  }
-  generatePrices();
-
   let round = (a, b) => Math.round(a / b) * b;
 
   for (let i = 0; i < CARDS_COUNT; i++) {
-    let url = IMG_URLS[getRandomNumber(-1, IMG_URLS.length - 1)];
+    let productPrice = getRandomNumber(MIN_PRICE, MAX_PRICE);
+    let url = IMG_URLS[getRandomNumber(0, IMG_URLS.length)];
     cards[i] = {
       url: `img/catalog/${url}.jpg`,
-      brand: BRANDS[getRandomNumber(-1, BRANDS.length - 1)],
-      title: TITLES[getRandomNumber(-1, TITLES.length - 1)],
-      price: PRICES[i],
-      category: CATEGORIES[getRandomNumber(-1, CATEGORIES.length - 1)],
-      discount: round(PRICES[i] * DISCOUNT_PERCENT, DISCOUNT_ROUND),
-      flag: FLAGS[getRandomNumber(-1, FLAGS.length - 1)],
-      isElectric: ELECTRIC_TYPE[getRandomNumber(-1, ELECTRIC_TYPE.length - 1)],
+      brand: BRANDS[getRandomNumber(0, BRANDS.length)],
+      title: TITLES[getRandomNumber(0, TITLES.length)],
+      price: productPrice,
+      category: CATEGORIES[getRandomNumber(0, CATEGORIES.length)],
+      discount: round(productPrice * DISCOUNT_PERCENT, DISCOUNT_ROUND),
+      flag: FLAGS[getRandomNumber(0, FLAGS.length)],
+      isElectric: ELECTRIC_TYPE[getRandomNumber(0, ELECTRIC_TYPE.length)],
     };
   }
-  console.log(cards);
 }
 
 function renderMarkup(target, markup) {
@@ -69,13 +59,13 @@ function renderCards(cardsData = cards) {
       <a class="bookmark" href="#">В закладки</a>
     </div>
     ${
-      cardData.flag === ''
-        ? ''
-        : `<div class="flag flag-${cardData.flag}">
+      cardData.flag
+        ? `<div class="flag flag-${cardData.flag}">
 	    <span class="visually-hidden">
 	       Новинка
 	    </span>
     </div>`
+        : ''
     }
     <div class="image">
       <img
@@ -95,4 +85,5 @@ function renderCards(cardsData = cards) {
 }
 
 dataGeneration();
+console.log(cards);
 renderCards();
