@@ -4,7 +4,7 @@ const CARDS_COUNT = 18;
 const MIN_PRICE = 5000;
 const MAX_PRICE = 20000;
 const DISCOUNT_ROUND = 500;
-const DISCOUNT_PERCENT = 0.15;
+const DISCOUNT_PERCENT = 1.15;
 const IMG_URLS = ['bosch-2000', 'bosch-3000', 'bosch-6000', 'bosch-9000', 'makita-td-110'];
 const BRANDS = ['BOSCH', 'Makita', 'Vagner', 'Mega', 'Proline'];
 const TITLES = [
@@ -53,4 +53,46 @@ function dataGeneration() {
   console.log(cards);
 }
 
+function renderMarkup(target, markup) {
+  target.innerHTML = '';
+  target.insertAdjacentHTML('afterbegin', markup);
+}
+
+const catalogList = document.querySelector('.catalog-list');
+
+function renderCards(cardsData = cards) {
+  const cards = cardsData
+    .map(function (cardData) {
+      return `<li class="catalog-item">
+    <div class="actions">
+      <a class="buy" href="#">Купить</a>
+      <a class="bookmark" href="#">В закладки</a>
+    </div>
+    ${
+      cardData.flag === ''
+        ? ''
+        : `<div class="flag flag-${cardData.flag}">
+	    <span class="visually-hidden">
+	       Новинка
+	    </span>
+    </div>`
+    }
+    <div class="image">
+      <img
+        src="${cardData.url}"
+        width="218"
+        height="168"
+        alt="${cardData.title}"
+      />
+    </div>
+    <h3 class="item-title">${cardData.title}</h3>
+    <span class="discount">${cardData.discount} Р.</span>
+    <a class="button price" href="#">${cardData.price} Р.</a>
+  </li>`;
+    })
+    .join('');
+  renderMarkup(catalogList, cards);
+}
+
 dataGeneration();
+renderCards();
