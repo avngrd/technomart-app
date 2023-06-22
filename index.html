@@ -183,9 +183,13 @@
             <section class="sorting-product">
               <h3>Сортировка:</h3>
               <ul class="sorting-list">
-                <li><a class="sorting-link by-price sorting-checked" href="#">По цене</a></li>
-                <li><a class="sorting-link by-type" href="#">По типу</a></li>
-                <li><a class="sorting-link by-functional" href="#">По функционалу</a></li>
+                <li data-type="price">
+                  <a class="sorting-link by-price sorting-checked" href="#">По цене</a>
+                </li>
+                <li data-type="type"><a class="sorting-link by-type" href="#">По типу</a></li>
+                <li data-type="func">
+                  <a class="sorting-link by-functional" href="#">По функционалу</a>
+                </li>
               </ul>
               <div class="direction">
                 <a

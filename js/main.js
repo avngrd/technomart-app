@@ -17,6 +17,7 @@ const TITLES = [
 const FLAGS = ['new', 'promo', ''];
 const CATEGORIES = ['Перфораторы', 'Шуруповерты', 'Ключи', 'Отвертки'];
 const ELECTRIC_TYPE = [true, false];
+const DEBOUNCE_INTERVAL = 500;
 
 const cards = [];
 
@@ -84,6 +85,79 @@ function renderCards(cardsData = cards) {
   renderMarkup(catalogList, cards);
 }
 
+function openModalWindow() {
+  const openModalButton = document.querySelector('.contacts-button');
+  const closeModalButton = document.querySelector('.modal-close ');
+  const modalWindow = document.querySelector('.modal-write');
+  const modalWrapper = document.querySelector('.modal');
+
+  function showModal() {
+    modalWindow.classList.add('modal-show');
+    initListeners();
+  }
+
+  function initListeners() {
+    closeModalButton.addEventListener('click', closeModal);
+    document.addEventListener('keydown', onKeyDownModalClose);
+  }
+
+  function removeListeners() {
+    closeModalButton.removeEventListener('click', closeModal);
+    document.removeEventListener('keydown', onKeyDownModalClose);
+  }
+
+  function onKeyDownModalClose(evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closeModal();
+    }
+  }
+
+  function closeModal() {
+    modalWindow.classList.remove('modal-show');
+    removeListeners();
+  }
+
+  openModalButton.addEventListener('click', showModal);
+}
+
+let lastTimeout;
+
+function debounce(callback, evt) {
+  if (lastTimeout) {
+    clearTimeout(lastTimeout);
+  }
+  lastTimeout = setTimeout(callback, DEBOUNCE_INTERVAL, evt);
+}
+
+function sortCards() {
+  const sortList = document.querySelector('.sorting-list');
+
+  function onSortListClick(evt) {
+    evt.preventDefault();
+    const button = evt.target.closest('li');
+
+    function getSortedPrice() {
+      return cards.sort(function (a, b) {
+        return b.price - a.price;
+      });
+    }
+
+    if (!button) {
+      return;
+    }
+
+    if (button.dataset.type === 'price') {
+      getSortedPrice();
+      console.log('aaa');
+      renderCards(getSortedPrice());
+    }
+  }
+
+  sortList.addEventListener('click', onSortListClick);
+}
 dataGeneration();
 console.log(cards);
 renderCards();
+openModalWindow();
+sortCards();
